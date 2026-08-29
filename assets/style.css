@@ -35,7 +35,7 @@
   /* Layout */
   --container: 1128px;
   --gutter: clamp(20px, 4vw, 48px);
-  --section-pad: clamp(72px, 10vw, 132px);
+  --section-pad: clamp(64px, 9vw, 112px);
 
   /* Motion */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -200,7 +200,9 @@ button {
 
 /* ---------- Reveal on scroll -------------------------------------------- */
 
-[data-reveal] {
+/* Hidden-for-reveal only when JS is present (progressive enhancement:
+   without JavaScript the whole page is simply visible). */
+html.js [data-reveal] {
   opacity: 0;
   transform: translateY(18px);
   transition:
@@ -209,7 +211,7 @@ button {
   transition-delay: var(--reveal-delay, 0ms);
 }
 
-[data-reveal].revealed {
+html.js [data-reveal].revealed {
   opacity: 1;
   transform: none;
 }
@@ -512,7 +514,7 @@ h2 {
 }
 
 .hero h1 {
-  font-size: clamp(44px, 7.6vw, 82px);
+  font-size: clamp(40px, 7.6vw, 82px);
   font-weight: 750;
   letter-spacing: -0.045em;
   line-height: 1.02;
@@ -676,11 +678,24 @@ html[data-theme="light"] .terminal__cmd {
 
 .figure__frame {
   background: var(--figure-bg);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: var(--r-lg);
   padding: clamp(14px, 2.4vw, 28px);
   box-shadow: var(--shadow-card);
   overflow: hidden;
+}
+
+/* Wide diagrams stay legible on phones: swipe horizontally
+   instead of shrinking label text to ~5px. */
+@media (max-width: 720px) {
+  .figure__frame {
+    overflow-x: auto;
+  }
+
+  .figure__frame img {
+    min-width: 620px;
+    max-width: none;
+  }
 }
 
 .figure__frame img {
@@ -704,6 +719,15 @@ html[data-theme="light"] .terminal__cmd {
 .grid {
   display: grid;
   gap: 18px;
+}
+
+/* Grid items must be free to shrink below their content's min-width
+   (nowrap code chips, terminal lines live in scroll containers). */
+.grid > *,
+.qs__step,
+.video-card,
+.step {
+  min-width: 0;
 }
 
 .grid--4 {
@@ -905,8 +929,10 @@ html[data-theme="light"] .terminal__cmd {
   margin-top: 22px;
   font-family: var(--font-mono);
   font-size: 12.5px;
+  line-height: 1.6;
   color: var(--text-3);
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 10px;
 }
@@ -976,17 +1002,6 @@ html[data-theme="light"] .terminal__cmd {
   color: var(--text-2);
 }
 
-.qs__cli {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  color: var(--text-3);
-}
-
-.qs__cli b {
-  color: var(--text);
-  font-weight: 500;
-}
-
 .mini-term {
   margin-top: 16px;
   background: var(--bg-inset);
@@ -1006,7 +1021,10 @@ html[data-theme="light"] .terminal__cmd {
 
 .mini-term .c {
   color: var(--text);
-  white-space: nowrap;
+  /* Long URLs soft-wrap like a real terminal instead of
+     overflowing the card on narrow viewports. */
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .mini-term .cm {
@@ -1505,6 +1523,12 @@ html[data-theme="light"] .terminal__cmd {
   }
 }
 
+@media (max-width: 360px) {
+  .steps {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ---------- Reduced motion ---------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
@@ -1520,7 +1544,7 @@ html[data-theme="light"] .terminal__cmd {
     transition-duration: 0.01ms !important;
   }
 
-  [data-reveal] {
+  html.js [data-reveal] {
     opacity: 1;
     transform: none;
   }

@@ -35,6 +35,7 @@
         if (s === "light" || s === "dark") t = s;
       } catch (e) { /* storage unavailable: keep default */ }
       document.documentElement.setAttribute("data-theme", t);
+      document.documentElement.classList.add("js");
     })();
   </script>
 </head>
@@ -406,7 +407,7 @@
                most modern CLIs auto-load <span class="k">AGENTS.md</span>.</p>
             <div class="mini-term">
               <div><span class="p">$</span> <span class="c">claude</span> <span class="cm"># Claude Code</span></div>
-              <div><span class="cm"># or: codex, cursor ., opencode</span></div>
+              <div><span class="cm"># or: codex, cursor, opencode</span></div>
             </div>
           </div>
           <div class="qs__step">
