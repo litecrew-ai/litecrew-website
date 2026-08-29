@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>litecrew — All your AI work. One workspace.</title>
+  <meta name="description" content="litecrew-workspace is an open source, self-hosted workspace of plain-Markdown conventions. A supervisor agent routes work to specialist subagents, knowledge persists as files, and the workspace stays continuous across sessions. No SaaS, no cloud, no telemetry.">
+  <meta name="author" content="litecrew contributors">
+  <meta name="theme-color" content="#0b0c0f">
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="litecrew">
+  <meta property="og:title" content="litecrew — All your AI work. One workspace.">
+  <meta property="og:description" content="A self-hosted workspace of plain-Markdown conventions. A supervisor agent routes work to specialist subagents, and knowledge persists as files. No SaaS, no cloud, no telemetry.">
+  <meta property="og:image" content="assets/img/social-preview.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="litecrew — All your AI work. One workspace.">
+  <meta name="twitter:description" content="A self-hosted workspace of plain-Markdown conventions. A supervisor agent routes work to specialist subagents, and knowledge persists as files. No SaaS, no cloud, no telemetry.">
+  <meta name="twitter:image" content="assets/img/social-preview.png">
+
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+  <link rel="preload" href="assets/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/jetbrains-mono-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/style.css">
+
+  <!-- Theme bootstrap: runs before first paint. Dark is the default;
+       a stored choice always wins. Prevents any flash of the wrong theme. -->
+  <script>
+    (function () {
+      var t = "dark";
+      try {
+        var s = localStorage.getItem("litecrew-theme");
+        if (s === "light" || s === "dark") t = s;
+      } catch (e) { /* storage unavailable: keep default */ }
+      document.documentElement.setAttribute("data-theme", t);
+    })();
+  </script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ================= Header ================= -->
+  <header class="site-header" id="site-header">
+    <div class="container">
+      <nav class="nav" aria-label="Primary">
+        <a class="brand" href="#top" aria-label="litecrew home">
+          <svg class="brand__mark" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 13.2 6.4 7.6M12 13.2l5.6-5.6M12 13.2V20" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M6.4 3.6 8.2 5.4 6.4 7.2 4.6 5.4Z" stroke="#d4a05a" stroke-width="1.5"/>
+            <path d="M17.6 3.6 19.4 5.4 17.6 7.2 15.8 5.4Z" stroke="#d4a05a" stroke-width="1.5"/>
+            <path d="M12 16.8 13.8 18.6 12 20.4 10.2 18.6Z" stroke="#d4a05a" stroke-width="1.5"/>
+            <circle cx="12" cy="12" r="2.6" fill="#d4a05a"/>
+          </svg>
+          litecrew
+        </a>
+
+        <ul class="nav__links">
+          <li><a href="#why">Why</a></li>
+          <li><a href="#how-it-works">How it works</a></li>
+          <li><a href="#use-cases">Use cases</a></li>
+          <li><a href="#video">Video</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+
+        <div class="nav__actions">
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch color theme" aria-pressed="false">
+            <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            </svg>
+            <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.7"/>
+              <path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.2 5.2l1.9 1.9M16.9 16.9l1.9 1.9M18.8 5.2l-1.9 1.9M7.1 16.9l-1.9 1.9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <a class="btn btn--primary btn--sm" href="https://github.com/litecrew-ai/litecrew-workspace" target="_blank" rel="noopener">
+            <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+            </svg>
+            Star
+          </a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <span id="top"></span>
+
+    <!-- ================= Hero ================= -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero__inner">
+          <p class="hero__badge" data-reveal>
+            <span class="dot" aria-hidden="true"></span>
+            Open source paradigm for long-running AI work
+          </p>
+
+          <h1 data-reveal style="--reveal-delay: 70ms">
+            All your AI work.<br>
+            <span class="accent">One workspace.</span>
+          </h1>
+
+          <p class="hero__sub" data-reveal style="--reveal-delay: 140ms">
+            <strong>litecrew-workspace</strong> is a self-hosted directory of plain-Markdown
+            conventions. A supervisor agent routes every piece of work to the right specialist
+            subagent, knowledge persists as files, and the workspace stays continuous across
+            sessions. No SaaS. No cloud. No telemetry.
+          </p>
+
+          <div class="terminal" data-reveal style="--reveal-delay: 210ms">
+            <div class="terminal__bar" aria-hidden="true">
+              <i></i><i></i><i></i>
+              <span class="terminal__title">bash</span>
+            </div>
+            <div class="terminal__body">
+              <span class="terminal__prompt" aria-hidden="true">$</span>
+              <code class="terminal__cmd" id="clone-cmd">git clone https://github.com/litecrew-ai/litecrew-workspace.git</code>
+              <button class="copy-btn" type="button" data-copy="#clone-cmd" aria-label="Copy clone command to clipboard">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/>
+                  <path d="M5 15H4.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V5" stroke="currentColor" stroke-width="1.8"/>
+                </svg>
+                <span>Copy</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="hero__actions" data-reveal style="--reveal-delay: 280ms">
+            <a class="btn btn--primary" href="https://github.com/litecrew-ai/litecrew-workspace" target="_blank" rel="noopener">
+              <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+              </svg>
+              Star on GitHub
+            </a>
+            <a class="btn btn--ghost" href="#how-it-works">See how it works</a>
+          </div>
+
+          <p class="hero__meta" data-reveal style="--reveal-delay: 350ms">
+            <span>Zero install</span>
+            <span>Zero dependencies</span>
+            <span>Zero database</span>
+            <span>Just Markdown and git</span>
+          </p>
+        </div>
+
+        <figure class="figure figure--tight" data-reveal style="--reveal-delay: 200ms; margin-top: clamp(56px, 8vw, 88px);">
+          <div class="figure__frame">
+            <img src="assets/img/hero-banner.webp" alt="litecrew-workspace brand banner: a supervisor agent orchestrating subagents over Markdown files" width="1915" height="821" fetchpriority="high">
+          </div>
+          <figcaption>Eve, the supervisor, orchestrating specialist subagents over plain Markdown files.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ================= Pain ================= -->
+    <section class="section pain" id="why">
+      <div class="container">
+        <div class="section__head" data-reveal>
+          <p class="eyebrow">The problem</p>
+          <h2>Your AI work is fragmented.</h2>
+          <p>Every domain found its tool. Every tool keeps its own chats, repos, and screenshots.
+             Nothing you learn in one place carries to the next.</p>
+        </div>
+
+        <div class="grid grid--4 pain__cards" data-reveal-group>
+          <div class="card">
+            <span class="card__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="m8 7-5 5 5 5M16 7l5 5-5 5M13.5 4.5 10.5 19.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <h3>Software</h3>
+            <p class="card__tool">Claude Code, Cursor</p>
+            <p>Sessions live and die inside a terminal.</p>
+          </div>
+          <div class="card">
+            <span class="card__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="4.5" width="18" height="15" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M3 9h18M8 4.5v4.5M16 4.5v4.5" stroke="currentColor" stroke-width="1.7"/></svg>
+            </span>
+            <h3>Video</h3>
+            <p class="card__tool">Veo</p>
+            <p>Prompts and clips buried in a web app.</p>
+          </div>
+          <div class="card">
+            <span class="card__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4.5 4.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            </span>
+            <h3>Research</h3>
+            <p class="card__tool">ChatGPT</p>
+            <p>Findings evaporate when the chat ends.</p>
+          </div>
+          <div class="card">
+            <span class="card__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3a2 2 0 0 1 2 2c2.4-.7 4.9 1.8 4.2 4.2C21.7 10.3 21.7 14 17 15l.5 3.5a2 2 0 0 1-2 2.3h-7a2 2 0 0 1-2-2.3L7 15c-4.7-1-4.7-4.7-1.2-5.8C5.1 6.8 7.6 4.3 10 5a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M7 15h10" stroke="currentColor" stroke-width="1.6"/></svg>
+            </span>
+            <h3>Art</h3>
+            <p class="card__tool">Midjourney</p>
+            <p>A gallery of one-off generations.</p>
+          </div>
+        </div>
+
+        <div class="pain__close" data-reveal>
+          <p>The work scatters across chats, repos, and screenshots —<br>
+             <em>and every session starts from zero.</em></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= How it works ================= -->
+    <section class="section" id="how-it-works">
+      <div class="container">
+        <div class="section__head" data-reveal>
+          <p class="eyebrow">How it works</p>
+          <h2>Three roles. Four file types.<br>One loop.</h2>
+          <p>litecrew-workspace is not an app you install. It is a set of conventions your
+             existing AI CLI already understands.</p>
+        </div>
+
+        <div class="grid grid--3 roles" data-reveal-group>
+          <div class="card">
+            <span class="role__tag">Role 01</span>
+            <h3>You</h3>
+            <p>Describe work in plain language, in the AI CLI you already use. Interrupt,
+               redirect, or ask for status at any time.</p>
+          </div>
+          <div class="card">
+            <span class="role__tag">Role 02</span>
+            <h3>Eve, the supervisor</h3>
+            <p>Emerges when your CLI reads <span class="k">AGENTS.md</span>. She drafts Goals
+               with success criteria, splits off Tasks, and dispatches subagents. She plans —
+               and never writes code herself.</p>
+          </div>
+          <div class="card">
+            <span class="role__tag">Role 03</span>
+            <h3>Subagents</h3>
+            <p>Specialist workers hired from <span class="k">agents/</span> for one Task at a
+               time. Frontend, research, video, hardware — the workspace hires what the work
+               needs.</p>
+          </div>
+        </div>
+
+        <p class="files-note" data-reveal>
+          The contract between all three is four kinds of plain files —
+          <span class="k">goals/</span>, <span class="k">tasks/</span>,
+          <span class="k">knowledge/</span>, and <span class="k">artifacts/</span> —
+          together with a durable trace of everything that happened. Every stage writes to
+          disk before it returns. The workspace state <em>is</em> the file system, which is
+          why nothing gets lost between sessions.
+        </p>
+
+        <figure class="figure" data-reveal>
+          <div class="figure__frame">
+            <img src="assets/img/architecture.webp" alt="Architecture diagram: you describe work in your AI CLI; the CLI reads AGENTS.md and operates as Eve; Eve dispatches subagents; the Markdown files are the contract between them" width="1448" height="1086" loading="lazy" decoding="async">
+          </div>
+          <figcaption>You describe work in your AI CLI. The CLI reads AGENTS.md and operates as Eve. Eve dispatches subagents. The files are the contract.</figcaption>
+        </figure>
+
+        <div class="section__head" style="margin-top: clamp(56px, 8vw, 88px);" data-reveal>
+          <p class="eyebrow">The life of one request</p>
+          <h2>Every request runs the same loop.</h2>
+        </div>
+
+        <div class="steps" data-reveal-group>
+          <div class="step">
+            <span class="step__n">01</span>
+            <div class="step__name">Describe</div>
+            <div class="step__sub">in your AI CLI</div>
+          </div>
+          <div class="step">
+            <span class="step__n">02</span>
+            <div class="step__name">Plan</div>
+            <div class="step__sub">Eve drafts a Goal</div>
+          </div>
+          <div class="step">
+            <span class="step__n">03</span>
+            <div class="step__name">Split</div>
+            <div class="step__sub">one Task at a time</div>
+          </div>
+          <div class="step">
+            <span class="step__n">04</span>
+            <div class="step__name">Dispatch</div>
+            <div class="step__sub">hire from agents/</div>
+          </div>
+          <div class="step">
+            <span class="step__n">05</span>
+            <div class="step__name">Work</div>
+            <div class="step__sub">writes to artifacts/</div>
+          </div>
+          <div class="step">
+            <span class="step__n">06</span>
+            <div class="step__name">Capture</div>
+            <div class="step__sub">writes to knowledge/</div>
+          </div>
+          <div class="step">
+            <span class="step__n">07</span>
+            <div class="step__name">Close</div>
+            <div class="step__sub">moves to archive/</div>
+          </div>
+        </div>
+
+        <p class="loop-note" data-reveal>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M18 2.5v4.4h-4.4M6 21.5v-4.4h4.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          When a Task closes, the loop returns to Plan for the next Task — until the Goal is done.
+        </p>
+
+        <figure class="figure" data-reveal>
+          <div class="figure__frame">
+            <img src="assets/img/lifecycle-flow.webp" alt="Lifecycle of one request: you describe, Eve plans, Eve splits, a subagent is dispatched, work happens, knowledge is captured, the task closes, then the loop continues with the next task" width="1672" height="941" loading="lazy" decoding="async">
+          </div>
+          <figcaption>The lifecycle of one request, from a single sentence to archived artifacts and captured knowledge.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ================= Differentiators ================= -->
+    <section class="section" id="different">
+      <div class="container">
+        <div class="section__head" data-reveal>
+          <p class="eyebrow">What makes it different</p>
+          <h2>Built to stay with you.</h2>
+          <p>Not another tab. A workspace that compounds.</p>
+        </div>
+
+        <div class="grid grid--3" data-reveal-group>
+          <div class="card">
+            <span class="card__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="m12 3 9 5-9 5-9-5 9-5ZM3 13l9 5 9-5" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+            </span>
+            <h3>One workspace, many domains</h3>
+            <p>Software, video, research, writing, ops — Eve routes each piece of work to the
+               right specialist. No more context-switching across five tools.</p>
+          </div>
+          <div class="card">
+            <span class="card__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 3.5h12V17l-6 3.5-6-3.5V3.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9.5 8.5h5M9.5 12h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            </span>
+            <h3>Knowledge auto-loads</h3>
+            <p>When you describe new work, Eve pulls relevant lessons from past Tasks. The
+               workspace becomes continuous, not session-bound.</p>
+          </div>
+          <div class="card">
+            <span class="card__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="4.8" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></svg>
+            </span>
+            <h3>Goals are first-class</h3>
+            <p>Multi-week projects get a real shape: success criteria, task chains, and a
+               progress log. Not just session history.</p>
+          </div>
+          <div class="card">
+            <span class="card__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 3v5h5M9 13h6M9 16.5h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <h3>Everything is plain Markdown</h3>
+            <p>Goals, Tasks, Knowledge, Sessions — <span class="k">grep</span>,
+               <span class="k">git diff</span>, and <span class="k">bat</span> all work.
+               No database to back up.</p>
+          </div>
+          <div class="card">
+            <span class="card__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3.5 7.5 12 3l8.5 4.5v9L12 21l-8.5-4.5v-9Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M12 12v9M12 12 3.5 7.5M12 12l8.5-4.5" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+            </span>
+            <h3>Empty by design</h3>
+            <p>Ships with the paradigm and no opinions about your domain. Software, research,
+               writing, hardware — same skeleton.</p>
+          </div>
+          <div class="card">
+            <span class="card__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="4.5" y="10.5" width="15" height="10" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 10.5V7a4 4 0 0 1 7.8-1.3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            </span>
+            <h3>Zero lock-in</h3>
+            <p>CLI-agnostic and model-agnostic. Works with Claude Code, Codex, Cursor,
+               opencode. If litecrew vanishes, you keep a clean directory of Markdown.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Quick start ================= -->
+    <section class="section" id="quick-start">
+      <div class="container">
+        <div class="section__head" data-reveal>
+          <p class="eyebrow">Quick start</p>
+          <h2>Running in under a minute.</h2>
+          <p>Clone the workspace, open it in your CLI, say what you want. That is the whole
+             setup.</p>
+        </div>
+
+        <div class="qs" data-reveal-group>
+          <div class="qs__step">
+            <span class="qs__num" aria-hidden="true">1</span>
+            <h3>Clone the workspace</h3>
+            <p>A plain directory. Nothing installs, nothing runs in the background.</p>
+            <div class="mini-term">
+              <div><span class="p">$</span> <span class="c">git clone https://github.com/litecrew-ai/litecrew-workspace.git my-workspace</span></div>
+              <div><span class="p">$</span> <span class="c">cd my-workspace</span></div>
+            </div>
+          </div>
+          <div class="qs__step">
+            <span class="qs__num" aria-hidden="true">2</span>
+            <h3>Open it in your AI CLI</h3>
+            <p>Your existing CLI is the runtime. Claude Code reads the contract automatically;
+               most modern CLIs auto-load <span class="k">AGENTS.md</span>.</p>
+            <div class="mini-term">
+              <div><span class="p">$</span> <span class="c">claude</span> <span class="cm"># Claude Code</span></div>
+              <div><span class="cm"># or: codex, cursor ., opencode</span></div>
+            </div>
+          </div>
+          <div class="qs__step">
+            <span class="qs__num" aria-hidden="true">3</span>
+            <h3>Describe the work</h3>
+            <p>One sentence is enough to start. Eve takes it from there.</p>
+            <p class="qs__quote">"Build me a SaaS landing page and ship it to Vercel."</p>
+          </div>
+        </div>
+
+        <p class="qs__outro" data-reveal>
+          Eve reads <strong>AGENTS.md</strong>, drafts a Goal capturing the outcome, splits off
+          the first Task, dispatches a subagent, and writes progress into the workspace as it
+          goes. You can interrupt, redirect, or ask for status at any time. When the Task
+          closes, Eve captures the reusable lessons and reports back.
+        </p>
+
+        <div class="qs__strip" data-reveal>
+          <span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m4.5 12.5 5 5 10-11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Zero install
+          </span>
+          <span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m4.5 12.5 5 5 10-11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Zero dependencies
+          </span>
+          <span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m4.5 12.5 5 5 10-11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Zero database
+          </span>
+          <span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m4.5 12.5 5 5 10-11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Just Markdown and git
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Use cases ================= -->
+    <section class="section usecase" id="use-cases">
+      <div class="container">
+        <div class="section__head" data-reveal>
+          <p class="eyebrow">Use cases</p>
+          <h2>If you can describe it,<br>Eve can run it.</h2>
+          <p>These are not features. They are shapes the paradigm takes when you describe
+             work in plain language.</p>
+        </div>
+
+        <div class="grid grid--3" data-reveal-group>
+          <div class="card">
+            <p class="usecase__say">Build a SaaS dashboard and ship it.</p>
+            <p>A Goal with success criteria. Tasks for schema, API, UI, auth, and deploy.
+               Frontend and backend subagents hired from <span class="k">agents/</span>, CI
+               walked, lessons captured.</p>
+            <p class="usecase__turns">A shipped product with a full audit trail.</p>
+          </div>
+          <div class="card">
+            <p class="usecase__say">Produce a 60-second AI short from this script.</p>
+            <p>A pipeline Goal: storyboard, first-frame, image-to-video, voiceover, stitch,
+               publish. Each stage is a Task; each engine choice becomes a knowledge note.</p>
+            <p class="usecase__turns">A repeatable production line for video.</p>
+          </div>
+          <div class="card">
+            <p class="usecase__say">Research projects X and Y, find our gap.</p>
+            <p>A research subagent is dispatched, repos are read, comparison tables are
+               written, and conclusions sediment into <span class="k">knowledge/</span> for
+               the next time you ask.</p>
+            <p class="usecase__turns">A benchmark that compounds instead of expiring.</p>
+          </div>
+          <div class="card">
+            <p class="usecase__say">Design an e-ink photo frame, ready for fabrication.</p>
+            <p>Component selection, schematic, PCB layout, then Gerber, BOM, and
+               pick-and-place — every stage filed under <span class="k">artifacts/</span>.</p>
+            <p class="usecase__turns">Fabrication-ready hardware files.</p>
+          </div>
+          <div class="card">
+            <p class="usecase__say">Build a side-scroller RPG prototype.</p>
+            <p>Game design document, art direction, MVP. A three-role pattern — planner,
+               art director, engineer — runs from <span class="k">agents/</span>.</p>
+            <p class="usecase__turns">A playable prototype with its own playbook.</p>
+          </div>
+          <div class="card">
+            <p class="usecase__say">Write a 5,000-word essay on topic X.</p>
+            <p>Research, outline, draft, revise — with the knowledge captured for the next
+               essay on adjacent topics.</p>
+            <p class="usecase__turns">A writing practice that remembers.</p>
+          </div>
+        </div>
+
+        <p class="usecase__foot" data-reveal>
+          The same workspace can hold all of these at once — or just one.
+          <strong>You bring the work; the workspace brings the discipline.</strong>
+        </p>
+      </div>
+    </section>
+
+    <!-- ================= Video ================= -->
+    <section class="section" id="video">
+      <div class="container">
+        <div class="section__head" data-reveal>
+          <p class="eyebrow">On film</p>
+          <h2>The loop, in motion.</h2>
+          <p>Two minutes that show what a file-based workspace feels like.</p>
+        </div>
+
+        <div class="videos" data-reveal-group>
+          <div class="video-card">
+            <div class="video-card__frame">
+              <video controls muted playsinline loop preload="metadata" poster="assets/img/readme-poster.webp" data-autoplay-in-view aria-label="litecrew-workspace walkthrough video: the directory tree, the supervisor contract, a dispatched task, and the lifecycle">
+                <source src="assets/video/litecrew-readme-en-bgm.mp4" type="video/mp4">
+                Your browser does not support embedded video.
+              </video>
+            </div>
+            <div class="video-card__meta">
+              <h3>The workspace in 35 seconds</h3>
+              <span>00:35</span>
+            </div>
+            <p class="video-card__desc">Real files, real contracts: the directory tree, AGENTS.md,
+               a dispatched Task, and the lifecycle — set to an ambient score.</p>
+          </div>
+          <div class="video-card">
+            <div class="video-card__frame">
+              <video controls muted playsinline loop preload="metadata" poster="assets/img/promo-poster.webp" data-autoplay-in-view aria-label="litecrew 60-second story video: from fragmented AI work to one persistent workspace">
+                <source src="assets/video/litecrew-promo-en.mp4" type="video/mp4">
+                Your browser does not support embedded video.
+              </video>
+            </div>
+            <div class="video-card__meta">
+              <h3>The story in 60 seconds</h3>
+              <span>01:00</span>
+            </div>
+            <p class="video-card__desc">From fragmented sessions to one persistent workspace —
+               the kinetic-typography cut, subtitled.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= What it is not ================= -->
+    <section class="section" id="not">
+      <div class="container">
+        <div class="section__head" data-reveal>
+          <p class="eyebrow">Positioning</p>
+          <h2>What it is not.</h2>
+          <p>Five things litecrew-workspace deliberately is not.</p>
+        </div>
+
+        <dl class="notlist" data-reveal>
+          <div class="notlist__row">
+            <dt><span class="no">not</span> a new CLI</dt>
+            <dd>You install nothing. Your existing Claude Code, Codex, or Cursor is the runtime.</dd>
+          </div>
+          <div class="notlist__row">
+            <dt><span class="no">not</span> a SaaS</dt>
+            <dd>No sign-up, no cloud, no telemetry. Files stay on your disk.</dd>
+          </div>
+          <div class="notlist__row">
+            <dt><span class="no">not</span> an agent framework</dt>
+            <dd>No SDK, no graphs to wire, no API to learn. Conventions, not code.</dd>
+          </div>
+          <div class="notlist__row">
+            <dt><span class="no">not</span> a note-taking app</dt>
+            <dd>Obsidian is for you to read. litecrew is for the AI to read — and write.</dd>
+          </div>
+          <div class="notlist__row">
+            <dt><span class="no">not</span> domain-specific</dt>
+            <dd>Not Cursor for code, not Midjourney for art. The workspace that orchestrates
+                them all.</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ================= FAQ ================= -->
+    <section class="section" id="faq">
+      <div class="container">
+        <div class="section__head" data-reveal>
+          <p class="eyebrow">FAQ</p>
+          <h2>Common questions.</h2>
+        </div>
+
+        <div class="faq" data-reveal>
+          <details>
+            <summary>
+              Which AI CLIs does it work with?
+              <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 9 7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </summary>
+            <p class="faq__a">Claude Code reads <span class="k">CLAUDE.md</span> automatically — the
+               repo symlinks it to <span class="k">AGENTS.md</span>, so the supervisor contract
+               loads with zero configuration. Codex, Cursor, opencode, and most modern AI CLIs
+               auto-load <span class="k">AGENTS.md</span> or an equivalent project file. If yours
+               does not, open <span class="k">AGENTS.md</span> in your first message and the rest
+               of the conversation follows the same paradigm.</p>
+          </details>
+          <details>
+            <summary>
+              Do I need to install anything?
+              <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 9 7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </summary>
+            <p class="faq__a">No. <span class="k">git clone</span>, open the directory in your
+               CLI, and start describing work. There is no package to install, no server to
+               run, and no database to provision.</p>
+          </details>
+          <details>
+            <summary>
+              Where does my data live?
+              <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 9 7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </summary>
+            <p class="faq__a">In the directory you cloned — as Markdown files, versioned by git.
+               Nothing leaves your disk. There is no cloud component and no telemetry.</p>
+          </details>
+          <details>
+            <summary>
+              What happens if litecrew disappears?
+              <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 9 7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </summary>
+            <p class="faq__a">You keep a clean directory of Markdown. The paradigm is the files:
+               goals, tasks, knowledge, artifacts. There is no service to shut down and no
+               export step to race against.</p>
+          </details>
+          <details>
+            <summary>
+              Is this an agent framework?
+              <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 9 7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </summary>
+            <p class="faq__a">No. There is no Python SDK, no graph DSL, and no API to learn. It is
+               a set of plain-Markdown conventions — roles, file types, and a lifecycle — that
+               your existing AI CLI already understands.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Final CTA ================= -->
+    <section class="section cta" id="get-started">
+      <div class="container cta__inner">
+        <p class="eyebrow" data-reveal>Get started</p>
+        <h2 data-reveal style="--reveal-delay: 60ms">Stop restarting<br>from zero.</h2>
+        <p class="cta__sub" data-reveal style="--reveal-delay: 120ms">
+          Clone the workspace, open it in your CLI, and describe the work.
+          Everything after that belongs to you.
+        </p>
+
+        <div class="terminal" data-reveal style="--reveal-delay: 180ms">
+          <div class="terminal__bar" aria-hidden="true">
+            <i></i><i></i><i></i>
+            <span class="terminal__title">bash</span>
+          </div>
+          <div class="terminal__body">
+            <span class="terminal__prompt" aria-hidden="true">$</span>
+            <code class="terminal__cmd" id="clone-cmd-2">git clone https://github.com/litecrew-ai/litecrew-workspace.git</code>
+            <button class="copy-btn" type="button" data-copy="#clone-cmd-2" aria-label="Copy clone command to clipboard">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/>
+                <path d="M5 15H4.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V5" stroke="currentColor" stroke-width="1.8"/>
+              </svg>
+              <span>Copy</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="cta__actions" data-reveal style="--reveal-delay: 240ms">
+          <a class="btn btn--primary" href="https://github.com/litecrew-ai/litecrew-workspace" target="_blank" rel="noopener">
+            <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+            </svg>
+            Star on GitHub
+          </a>
+          <a class="btn btn--ghost" href="https://github.com/litecrew-ai/litecrew-workspace/issues" target="_blank" rel="noopener">Open an issue</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= Footer ================= -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <span class="wordmark">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 13.2 6.4 7.6M12 13.2l5.6-5.6M12 13.2V20" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M6.4 3.6 8.2 5.4 6.4 7.2 4.6 5.4Z" stroke="#d4a05a" stroke-width="1.5"/>
+              <path d="M17.6 3.6 19.4 5.4 17.6 7.2 15.8 5.4Z" stroke="#d4a05a" stroke-width="1.5"/>
+              <path d="M12 16.8 13.8 18.6 12 20.4 10.2 18.6Z" stroke="#d4a05a" stroke-width="1.5"/>
+              <circle cx="12" cy="12" r="2.6" fill="#d4a05a"/>
+            </svg>
+            litecrew
+          </span>
+          <p>The workspace for long-running AI work. Build software, create videos, research
+             ideas, write documents, and run projects — all in one persistent workspace.</p>
+        </div>
+
+        <div class="footer__links">
+          <div class="footer__col">
+            <h4>Project</h4>
+            <ul>
+              <li>
+                <a href="https://github.com/litecrew-ai/litecrew-workspace" target="_blank" rel="noopener">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                  GitHub
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/litecrew-ai/litecrew-workspace/issues" target="_blank" rel="noopener">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M9.6 9.2a2.5 2.5 0 1 1 3.4 2.3c-.8.35-1 .9-1 1.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="16.8" r="1.15" fill="currentColor"/></svg>
+                  Issues
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/litecrew-ai/litecrew-workspace/stargazers" target="_blank" rel="noopener">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m12 3 2.7 5.7 6.3.8-4.6 4.3 1.2 6.2L12 17l-5.6 3 1.2-6.2L3 9.5l6.3-.8L12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+                  Stars
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="footer__col">
+            <h4>Learn</h4>
+            <ul>
+              <li><a href="#how-it-works">How it works</a></li>
+              <li><a href="#quick-start">Quick start</a></li>
+              <li><a href="#use-cases">Use cases</a></li>
+              <li><a href="#faq">FAQ</a></li>
+            </ul>
+          </div>
+          <div class="footer__col">
+            <h4>Legal</h4>
+            <ul>
+              <li><a href="LICENSE" target="_blank" rel="noopener">MIT License</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <span>© 2026 litecrew contributors. Code licensed under MIT.</span>
+        <span>Set in Inter and JetBrains Mono, both under the SIL Open Font License 1.1.</span>
+        <span class="domain"><span>litecrew</span>.ai</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/main.js"></script>
+</body>
+</html>
