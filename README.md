@@ -21,6 +21,11 @@ fonts, images, and videos are all self-hosted in this repository.
 │   ├── img/            # Diagrams and video posters (converted to WebP from the
 │   │                   #   main repo's docs/assets, plus social-preview.png for OG)
 │   └── video/          # 35s workspace walkthrough (with score) + 60s promo film
+├── cases/              # Real artifacts produced by litecrew-workspace runs,
+│   │                   #   each served at /cases/<slug>/ — see "Cases" below
+│   └── internet-archaeology/   # The Dead Web Gazette (20-dispatch blog)
+├── scripts/
+│   └── sync-case.sh    # Sync a run's site into cases/<slug>/ (see "Cases")
 ├── LICENSE             # MIT (code and content). Fonts are OFL — see assets/fonts/.
 └── README.md
 ```
@@ -37,6 +42,45 @@ fonts, images, and videos are all self-hosted in this repository.
 - **Real media, copied in-repo.** Diagrams and videos originate from the
   litecrew-workspace repository and its marketing artifacts; nothing is hot-linked
   across repositories.
+- **Real cases, hosted in-repo.** `cases/` carries finished sites produced by
+  litecrew-workspace runs, each with an injected provenance bar linking back to
+  this site and to its source files.
+
+## Cases
+
+The `cases/` directory hosts **real artifacts produced end-to-end by single
+litecrew-workspace runs** — not mockups. Each case is a self-contained static
+site served at `/cases/<slug>/` on this domain, linked from the landing page's
+Cases section.
+
+**Adding or updating a case:**
+
+```bash
+scripts/sync-case.sh <path-to-run-site> <slug>
+# e.g.
+scripts/sync-case.sh ../litecrew-workspace-showcase/artifacts/writing/internet-archaeology-blog/site internet-archaeology
+```
+
+The script is idempotent (rerunning produces byte-identical output) and does
+three things:
+
+1. **Mirrors** the source tree into `cases/<slug>/` (the destination is
+   rebuilt, so files removed upstream disappear here too).
+2. **Injects a provenance bar** at the top of every HTML page — "This site was
+   produced entirely by a litecrew-workspace run" with a link back to `/` and
+   to the source files on GitHub. The bar carries its own scoped inline styles
+   and never touches the case's own stylesheet.
+3. **Rewrites placeholder feed URLs** (`example.org`) to the live
+   `https://litecrew.ai/cases/<slug>/` prefix, and fails loudly if any
+   residue survives.
+
+Then link the case from the Cases section in `index.html` (art, title, a
+real-output line, source link) and commit.
+
+**License note:** content under `cases/` originates from the
+[litecrew-workspace-showcase](https://github.com/litecrew-ai/litecrew-workspace-showcase)
+repository (MIT) and is synced verbatim apart from the provenance bar and the
+feed URL rewrite.
 
 ## Preview locally
 
@@ -56,11 +100,13 @@ The site is a single directory of static files — any host will do.
 
 - **GitHub Pages:** push this repository, enable Pages on the default branch. Done.
 - **Cloudflare Pages / Netlify:** point at the repository, no build command, output
-  directory is the repo root.
+  directory is the repo root. Static subdirectories such as `cases/` are served
+  as-is; no routing configuration is needed.
 
-After a real domain is attached, make `og:image` and `twitter:image` in `index.html`
-absolute URLs (e.g. `https://litecrew.ai/assets/img/social-preview.png`) — some social
-crawlers do not resolve relative Open Graph images.
+`og:image` and `twitter:image` in `index.html` are absolute URLs
+(`https://litecrew.ai/assets/img/social-preview.png`) — some social crawlers do
+not resolve relative Open Graph images. If the domain ever changes, update those
+two tags and the `SITE_ORIGIN` constant in `scripts/sync-case.sh`.
 
 ## Content policy
 
