@@ -14,14 +14,16 @@
 # What it does (idempotent -- rerunning produces byte-identical output):
 #   1. mirror the source tree into cases/<slug>/ (destination is rebuilt
 #      from scratch, which gives rsync --delete semantics with no rsync)
-#   2. inject the litecrew provenance bar right after <body> in every HTML
-#      file (self-contained inline styles; the case's own stylesheet is
+#   2. inject the litecrew provenance bar into every HTML file right after
+#      <body> (self-contained inline styles; the case's own stylesheet is
 #      never touched; an existing bar is replaced, not duplicated). The
-#      bar is dismissible: a close button (unhidden by its inline script)
-#      hides it and remembers the dismissal per slug in localStorage under
-#      "litecrew-bar-hidden" (comma-separated slug list), so it stays
-#      hidden across the case's pages. Without JavaScript the bar simply
-#      shows with no close button.
+#      bar is a fixed overlay summoned from the top of the viewport: an
+#      invisible 14px hotspot strip is always there; hovering it (or the
+#      bar) slides the bar in, moving the pointer away slides it out after
+#      a short delay; tabbing into the bar's links reveals it via
+#      :focus-within; on touch devices tapping the hotspot toggles it.
+#      With JavaScript disabled the bar falls back to a plain always
+#      visible in-flow strip (nothing is hidden and no hotspot exists).
 #   3. rewrite placeholder feed URLs (example.org) to the live case URL
 #
 # Dependencies: bash, git (only to resolve the source-repository URL for
@@ -98,6 +100,19 @@ fi
 # --------------------------------------------------------------------------
 # The provenance bar. Everything is scoped under #lc-provenance-bar so the
 # case's own stylesheet and design are never affected, and vice versa.
+#
+# Interaction model (progressive enhancement):
+#   - No-JS base: .lc-bar__panel is a plain in-flow strip, always visible.
+#   - The inline script adds html.lc-js, which turns the aside into a
+#     zero-height fixed anchor, shows a 14px invisible hotspot strip pinned
+#     to the top of the viewport, and parks the panel off-screen above it
+#     (transform only -- the links stay tabbable so :focus-within can pull
+#     the bar down for keyboard users).
+#   - Mouse: entering the hotspot or the bar slides it in; leaving starts a
+#     400ms timer before it slides back out (anti-flicker delay).
+#   - Touch: tapping the hotspot toggles the bar.
+#   - prefers-reduced-motion: the slide transition is dropped (direct
+#     show/hide).
 # --------------------------------------------------------------------------
 source_link_open=""
 source_link_close=""
@@ -112,50 +127,69 @@ read -r -d '' BAR <<HTML || true
 <!--lc-provenance-bar:start-->
 <aside id="lc-provenance-bar" aria-label="How this site was made">
 <style>
-#lc-provenance-bar{position:relative;background:#0b0c0f;color:#b9b7ae;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:12.5px;line-height:1.5;border-bottom:1px solid #2a2d33}
-#lc-provenance-bar .lc-bar__inner{position:relative;max-width:1080px;margin:0 auto;padding:10px 20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px 16px;text-align:center}
+#lc-provenance-bar .lc-bar__panel{background:#0b0c0f;color:#b9b7ae;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:12.5px;line-height:1.5;border-bottom:1px solid #2a2d33}
+#lc-provenance-bar .lc-bar__inner{max-width:1080px;margin:0 auto;padding:10px 20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px 16px;text-align:center}
 #lc-provenance-bar p{margin:0}
 #lc-provenance-bar .lc-bar__mark{color:#d4a05a;font-weight:600;letter-spacing:.02em;margin-right:.45em}
 #lc-provenance-bar a{color:#d4a05a;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.18em}
 #lc-provenance-bar a:hover{color:#e5b877}
 #lc-provenance-bar a:focus-visible{outline:2px solid #d4a05a;outline-offset:2px}
-#lc-provenance-bar .lc-bar__close:not([hidden]){position:absolute;top:50%;right:0;transform:translateY(-50%);display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;color:#8b8a83;background:none;border:none;border-radius:6px;cursor:pointer}
-#lc-provenance-bar .lc-bar__close:hover{color:#f3f1ec;background:rgba(255,255,255,0.07)}
-#lc-provenance-bar .lc-bar__close:focus-visible{outline:2px solid #d4a05a;outline-offset:-2px}
-@media (max-width:480px){#lc-provenance-bar .lc-bar__inner{padding:10px 36px 10px 14px}}
+#lc-provenance-bar .lc-bar__hit{display:none}
+html.lc-js #lc-provenance-bar{position:fixed;top:0;left:0;width:100%;height:0;z-index:2147483646}
+html.lc-js #lc-provenance-bar .lc-bar__panel{position:absolute;top:0;left:0;width:100%;transform:translateY(-100%);transition:transform .3s ease-out}
+html.lc-js #lc-provenance-bar .lc-bar__hit{display:block;position:fixed;top:0;left:0;width:100%;height:14px;background:transparent}
+html.lc-js #lc-provenance-bar.lc-bar--open .lc-bar__panel,
+html.lc-js #lc-provenance-bar:focus-within .lc-bar__panel{transform:none}
+@media (prefers-reduced-motion:reduce){html.lc-js #lc-provenance-bar .lc-bar__panel{transition:none}}
+@media (max-width:480px){#lc-provenance-bar .lc-bar__inner{padding:10px 14px}}
 </style>
+<div class="lc-bar__panel">
 <div class="lc-bar__inner">
 <p><span class="lc-bar__mark">litecrew</span>This site was produced entirely by a litecrew-workspace run.</p>
 <p><a href="/">Back to litecrew.ai</a>$source_sep$source_link_open Source run on GitHub$source_link_close</p>
-<button type="button" class="lc-bar__close" hidden aria-label="Hide the litecrew provenance bar">
-<svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 5 14 14M19 5 5 19" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
-</button>
 </div>
+</div>
+<div class="lc-bar__hit" aria-hidden="true"></div>
 <script>
 (function(){
 var bar=document.getElementById("lc-provenance-bar");
 if(!bar){return}
-var KEY="litecrew-bar-hidden";
-var SLUG="$SLUG";
-function dismissed(){
-try{
-var v=localStorage.getItem(KEY);
-return !!v&&v.split(",").indexOf(SLUG)!==-1
-}catch(e){return false}
+var root=document.documentElement;
+if(!root.classList){return}
+root.classList.add("lc-js");
+var DELAY=400;
+var closeTimer=null;
+function open(){
+if(closeTimer){clearTimeout(closeTimer);closeTimer=null}
+bar.classList.add("lc-bar--open")
 }
-if(dismissed()){bar.style.display="none";return}
-var btn=bar.querySelector(".lc-bar__close");
-if(!btn){return}
-btn.hidden=false;
-btn.addEventListener("click",function(){
-bar.style.display="none";
-try{
-var v=localStorage.getItem(KEY)||"";
-if(v.split(",").indexOf(SLUG)===-1){
-localStorage.setItem(KEY,v?v+","+SLUG:SLUG)
+function close(){bar.classList.remove("lc-bar--open")}
+function scheduleClose(){
+if(closeTimer){clearTimeout(closeTimer)}
+closeTimer=setTimeout(close,DELAY)
 }
-}catch(e){}
+if(window.PointerEvent){
+bar.addEventListener("pointerenter",function(e){
+if((e.pointerType||"mouse")!=="mouse"){return}
+open()
 });
+bar.addEventListener("pointerleave",function(e){
+if((e.pointerType||"mouse")!=="mouse"){return}
+scheduleClose()
+})
+}else{
+bar.addEventListener("mouseenter",open);
+bar.addEventListener("mouseleave",scheduleClose)
+}
+var hit=bar.querySelector(".lc-bar__hit");
+if(hit){
+var lastType="mouse";
+hit.addEventListener("pointerdown",function(e){lastType=e.pointerType||"mouse"},{passive:true});
+hit.addEventListener("click",function(){
+if(lastType==="mouse"){return}
+if(bar.classList.contains("lc-bar--open")){close()}else{open()}
+})
+}
 })();
 </script>
 </aside>

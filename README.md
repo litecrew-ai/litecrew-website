@@ -66,15 +66,17 @@ three things:
 
 1. **Mirrors** the source tree into `cases/<slug>/` (the destination is
    rebuilt, so files removed upstream disappear here too).
-2. **Injects a provenance bar** at the top of every HTML page — "This site was
-   produced entirely by a litecrew-workspace run" with a link back to `/` and
-   to the source files on GitHub. The bar carries its own scoped inline styles
-   and never touches the case's own stylesheet. It is dismissible: clicking the
-   close button hides it and records the slug in `localStorage` under
-   `litecrew-bar-hidden` (a comma-separated list), so the bar stays hidden on
-   every page of that case. To bring it back, clear the site's local storage —
-   there is deliberately no restore control. Without JavaScript the bar simply
-   shows with no close button.
+2. **Injects a provenance bar** into every HTML page right after `<body>` —
+   "This site was produced entirely by a litecrew-workspace run" with a link
+   back to `/` and to the source files on GitHub. The bar carries its own
+   scoped inline styles and never touches the case's own stylesheet. It is a
+   fixed overlay summoned from the top of the viewport: an invisible 14px
+   hotspot strip is always pinned there; hovering it (or the bar) slides the
+   bar in, moving the pointer away slides it out after a 400ms delay; tabbing
+   into the bar's links reveals it via `:focus-within`; on touch devices
+   tapping the hotspot toggles it, and the slide respects
+   `prefers-reduced-motion`. With JavaScript disabled the bar falls back to a
+   plain always-visible in-flow strip.
 3. **Rewrites placeholder feed URLs** (`example.org`) to the live
    `https://litecrew.ai/cases/<slug>/` prefix, and fails loudly if any
    residue survives.
