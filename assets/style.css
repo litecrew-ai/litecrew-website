@@ -1073,15 +1073,15 @@ html[data-theme="light"] .terminal__cmd {
   color: var(--accent-decor);
 }
 
-/* ---------- Use cases --------------------------------------------------- */
+/* ---------- Workflows --------------------------------------------------- */
 
-.usecase .card {
+.workflows .card {
   display: flex;
   flex-direction: column;
   padding: 24px;
 }
 
-.usecase__say {
+.workflows__say {
   font-family: var(--font-mono);
   font-size: 13px;
   line-height: 1.6;
@@ -1089,12 +1089,12 @@ html[data-theme="light"] .terminal__cmd {
   margin-bottom: 14px;
 }
 
-.usecase__say::before {
+.workflows__say::before {
   content: "$ ";
   color: var(--text-3);
 }
 
-.usecase__turns {
+.workflows__turns {
   margin-top: auto;
   padding-top: 14px;
   border-top: 1px solid var(--border);
@@ -1103,7 +1103,7 @@ html[data-theme="light"] .terminal__cmd {
   color: var(--text-2);
 }
 
-.usecase__turns::before {
+.workflows__turns::before {
   content: "Eve turns it into";
   display: block;
   font-family: var(--font-ui);
@@ -1115,7 +1115,7 @@ html[data-theme="light"] .terminal__cmd {
   margin-bottom: 8px;
 }
 
-.usecase__foot {
+.workflows__foot {
   margin-top: clamp(36px, 5vw, 48px);
   text-align: center;
   font-size: 15.5px;
@@ -1125,7 +1125,7 @@ html[data-theme="light"] .terminal__cmd {
   text-wrap: pretty;
 }
 
-.usecase__foot strong {
+.workflows__foot strong {
   color: var(--text-2);
   font-weight: 600;
 }
