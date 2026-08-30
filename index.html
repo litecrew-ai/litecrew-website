@@ -13,11 +13,11 @@
   <meta property="og:site_name" content="litecrew">
   <meta property="og:title" content="litecrew — All your AI work. One workspace.">
   <meta property="og:description" content="A self-hosted workspace of plain-Markdown conventions. A supervisor agent routes work to specialist subagents, and knowledge persists as files. No SaaS, no cloud, no telemetry.">
-  <meta property="og:image" content="assets/img/social-preview.png">
+  <meta property="og:image" content="https://litecrew.ai/assets/img/social-preview.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="litecrew — All your AI work. One workspace.">
   <meta name="twitter:description" content="A self-hosted workspace of plain-Markdown conventions. A supervisor agent routes work to specialist subagents, and knowledge persists as files. No SaaS, no cloud, no telemetry.">
-  <meta name="twitter:image" content="assets/img/social-preview.png">
+  <meta name="twitter:image" content="https://litecrew.ai/assets/img/social-preview.png">
 
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 
@@ -62,6 +62,7 @@
           <li><a href="#why">Why</a></li>
           <li><a href="#how-it-works">How it works</a></li>
           <li><a href="#use-cases">Use cases</a></li>
+          <li><a href="#cases">Cases</a></li>
           <li><a href="#video">Video</a></li>
           <li><a href="#faq">FAQ</a></li>
         </ul>
@@ -504,6 +505,49 @@
       </div>
     </section>
 
+    <!-- ================= Cases ================= -->
+    <section class="section" id="cases">
+      <div class="container">
+        <div class="section__head" data-reveal>
+          <p class="eyebrow">Cases</p>
+          <h2>Real runs. Real output.</h2>
+          <p>The use cases above are shapes the paradigm can take. The cases below are
+             what it actually produced — finished sites, hosted here, made by a single
+             workspace run from first research to final HTML.</p>
+        </div>
+
+        <div class="cases">
+          <article class="case-card" data-reveal>
+            <a class="case-card__art" href="/cases/internet-archaeology/" aria-label="Open the case: The Dead Web Gazette">
+              <img src="/cases/internet-archaeology/assets/geocities.webp"
+                   alt="Screenshot plate from The Dead Web Gazette: the GeoCities homepage as archived in July 1998, complete with neighborhood directories and period banner ads"
+                   width="881" height="461" loading="lazy" decoding="async">
+              <span class="case-card__open">
+                Open the case
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </a>
+            <div class="case-card__body">
+              <p class="case-card__tag">Writing &middot; internet archaeology</p>
+              <h3 class="case-card__title"><a href="/cases/internet-archaeology/">The Dead Web Gazette</a></h3>
+              <p class="case-card__desc">A complete periodical of digital archaeology: 20 dispatches
+                 memorializing things the internet used to have, each one researched, written,
+                 illustrated, and assembled by one litecrew-workspace run. Sixty-five static
+                 files, every claim sourced, no JavaScript.</p>
+              <p class="case-card__meta">Real output, not a mockup —
+                <a href="https://github.com/litecrew-ai/litecrew-workspace-showcase/tree/main/artifacts/writing/internet-archaeology-blog/site" target="_blank" rel="noopener">source files on GitHub</a>.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <p class="cases__foot" data-reveal>
+          New cases land here as workspace runs finish. Syncing one into this site is a
+          single command — <span class="k">scripts/sync-case.sh &lt;src&gt; &lt;slug&gt;</span>.
+        </p>
+      </div>
+    </section>
+
     <!-- ================= Video ================= -->
     <section class="section" id="video">
       <div class="container">
@@ -731,6 +775,7 @@
               <li><a href="#how-it-works">How it works</a></li>
               <li><a href="#quick-start">Quick start</a></li>
               <li><a href="#use-cases">Use cases</a></li>
+              <li><a href="#cases">Cases</a></li>
               <li><a href="#faq">FAQ</a></li>
             </ul>
           </div>
