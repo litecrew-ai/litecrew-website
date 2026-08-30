@@ -284,6 +284,130 @@ html.js [data-reveal].revealed {
   background: var(--bg-hover);
 }
 
+/* ---------- Cases dropdown ---------------------------------------------- */
+
+.nav-cases {
+  position: relative;
+}
+
+/* .nav__links a sets display:block at (0,1,1); this needs (0,2,0) to win
+   so the chevron sits beside the label instead of under it (the global
+   svg{display:block} reset stacks block children). */
+.nav__links .nav-cases__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.nav-cases__chev {
+  flex: none;
+  color: var(--text-3);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+/* The chevron only makes sense once JS can open the menu. */
+html:not(.js) .nav-cases__chev {
+  display: none;
+}
+
+.nav-cases__trigger[aria-expanded="true"] {
+  color: var(--text);
+  background: var(--bg-hover);
+}
+
+.nav-cases__trigger[aria-expanded="true"] .nav-cases__chev {
+  transform: rotate(180deg);
+}
+
+.nav-cases__menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 60;
+  min-width: 340px;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+  background: var(--bg-elev);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-pop);
+}
+
+.nav-cases__menu:not([hidden]) {
+  animation: menu-in 150ms var(--ease-out);
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.nav-cases__menu a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  font-size: 14px;
+  color: var(--text-2);
+  transition: background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.nav-cases__menu a:hover,
+.nav-cases__menu a:focus-visible {
+  color: var(--text);
+  background: var(--bg-hover);
+}
+
+.nav-cases__menu a img {
+  width: 52px;
+  height: 52px;
+  flex: none;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--figure-bg);
+}
+
+.nav-cases__item-body {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.nav-cases__item-title {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.nav-cases__item-line {
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text-3);
+  text-wrap: pretty;
+}
+
+.nav-cases__item-arrow {
+  margin-left: auto;
+  flex: none;
+  color: var(--text-3);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.nav-cases__menu a:hover .nav-cases__item-arrow,
+.nav-cases__menu a:focus-visible .nav-cases__item-arrow {
+  color: var(--accent-ink);
+}
+
 .nav__actions {
   display: flex;
   align-items: center;
@@ -1601,11 +1725,50 @@ html[data-theme="light"] .terminal__cmd {
     grid-template-columns: repeat(4, 1fr);
     row-gap: 26px;
   }
+
+  /* The dropdown becomes a full-width sheet attached to the header
+     instead of a floating panel that could clip at the viewport edge. */
+  .nav-cases {
+    position: static;
+  }
+
+  .nav-cases__menu {
+    top: 100%;
+    left: 0;
+    right: 0;
+    min-width: 0;
+    border-radius: 0 0 var(--r-md) var(--r-md);
+  }
 }
 
 @media (max-width: 900px) {
+  /* Keep the nav reachable on small screens: the links wrap into a
+     compact, horizontally scrollable row under the brand row. */
+  .nav {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 64px;
+    row-gap: 2px;
+  }
+
   .nav__links {
+    display: flex;
+    width: 100%;
+    gap: 2px;
+    padding-bottom: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nav__links::-webkit-scrollbar {
     display: none;
+  }
+
+  .nav__links a {
+    padding: 6px 10px;
+    font-size: 13px;
+    white-space: nowrap;
   }
 
   .grid--3 {

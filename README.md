@@ -79,8 +79,24 @@ three things:
    `https://litecrew.ai/cases/<slug>/` prefix, and fails loudly if any
    residue survives.
 
-Then link the case from the Cases section in `index.html` (art, title, a
-real-output line, source link) and commit.
+Then **register the case in the `CASES` registry** at the top of
+`assets/main.js` — the nav "Cases" dropdown is generated from this list at
+runtime, so a new case needs exactly one entry:
+
+```js
+var CASES = [
+  {
+    slug: "internet-archaeology",                         // directory under cases/
+    title: "The Dead Web Gazette",                        // shown in the dropdown
+    line: "One line describing the output",               // subtitle in the dropdown
+    thumb: "/cases/internet-archaeology/assets/x.webp"    // optional 52x52 thumbnail
+  }
+];
+```
+
+Without JavaScript the nav item simply stays a link to the Cases section.
+Finally add the case card to the Cases section in `index.html` (art, title,
+a real-output line, source link) and commit.
 
 **License note:** content under `cases/` originates from the
 [litecrew-workspace-showcase](https://github.com/litecrew-ai/litecrew-workspace-showcase)
