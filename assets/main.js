@@ -20,7 +20,7 @@
       slug: "internet-archaeology",
       title: "The Dead Web Gazette",
       line: "A periodical of digital archaeology: 20 sourced dispatches on things the old web lost",
-      thumb: "/cases/internet-archaeology/assets/geocities.webp"
+      thumb: "/assets/img/case-internet-archaeology.webp"
     }
   ];
 

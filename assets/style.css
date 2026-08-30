@@ -1286,7 +1286,7 @@ html[data-theme="light"] .terminal__cmd {
   position: relative;
   display: block;
   min-width: 0;
-  aspect-ratio: 881 / 461;
+  aspect-ratio: 2880 / 1554;
   background: var(--figure-bg);
   border-bottom: 1px solid var(--border);
 }
