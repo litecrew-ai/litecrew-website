@@ -69,7 +69,12 @@ three things:
 2. **Injects a provenance bar** at the top of every HTML page — "This site was
    produced entirely by a litecrew-workspace run" with a link back to `/` and
    to the source files on GitHub. The bar carries its own scoped inline styles
-   and never touches the case's own stylesheet.
+   and never touches the case's own stylesheet. It is dismissible: clicking the
+   close button hides it and records the slug in `localStorage` under
+   `litecrew-bar-hidden` (a comma-separated list), so the bar stays hidden on
+   every page of that case. To bring it back, clear the site's local storage —
+   there is deliberately no restore control. Without JavaScript the bar simply
+   shows with no close button.
 3. **Rewrites placeholder feed URLs** (`example.org`) to the live
    `https://litecrew.ai/cases/<slug>/` prefix, and fails loudly if any
    residue survives.

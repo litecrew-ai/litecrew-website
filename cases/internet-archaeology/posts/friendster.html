@@ -11,19 +11,52 @@
 <!--lc-provenance-bar:start-->
 <aside id="lc-provenance-bar" aria-label="How this site was made">
 <style>
-#lc-provenance-bar{background:#0b0c0f;color:#b9b7ae;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:12.5px;line-height:1.5;border-bottom:1px solid #2a2d33}
-#lc-provenance-bar .lc-bar__inner{max-width:1080px;margin:0 auto;padding:10px 20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px 16px;text-align:center}
+#lc-provenance-bar{position:relative;background:#0b0c0f;color:#b9b7ae;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:12.5px;line-height:1.5;border-bottom:1px solid #2a2d33}
+#lc-provenance-bar .lc-bar__inner{position:relative;max-width:1080px;margin:0 auto;padding:10px 20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px 16px;text-align:center}
 #lc-provenance-bar p{margin:0}
 #lc-provenance-bar .lc-bar__mark{color:#d4a05a;font-weight:600;letter-spacing:.02em;margin-right:.45em}
 #lc-provenance-bar a{color:#d4a05a;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.18em}
 #lc-provenance-bar a:hover{color:#e5b877}
 #lc-provenance-bar a:focus-visible{outline:2px solid #d4a05a;outline-offset:2px}
-@media (max-width:480px){#lc-provenance-bar .lc-bar__inner{padding:10px 14px}}
+#lc-provenance-bar .lc-bar__close:not([hidden]){position:absolute;top:50%;right:0;transform:translateY(-50%);display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;color:#8b8a83;background:none;border:none;border-radius:6px;cursor:pointer}
+#lc-provenance-bar .lc-bar__close:hover{color:#f3f1ec;background:rgba(255,255,255,0.07)}
+#lc-provenance-bar .lc-bar__close:focus-visible{outline:2px solid #d4a05a;outline-offset:-2px}
+@media (max-width:480px){#lc-provenance-bar .lc-bar__inner{padding:10px 36px 10px 14px}}
 </style>
 <div class="lc-bar__inner">
 <p><span class="lc-bar__mark">litecrew</span>This site was produced entirely by a litecrew-workspace run.</p>
 <p><a href="/">Back to litecrew.ai</a> &middot; <a href="https://github.com/litecrew-ai/litecrew-workspace-showcase/tree/main/artifacts/writing/internet-archaeology-blog/site" target="_blank" rel="noopener"> Source run on GitHub</a></p>
+<button type="button" class="lc-bar__close" hidden aria-label="Hide the litecrew provenance bar">
+<svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 5 14 14M19 5 5 19" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+</button>
 </div>
+<script>
+(function(){
+var bar=document.getElementById("lc-provenance-bar");
+if(!bar){return}
+var KEY="litecrew-bar-hidden";
+var SLUG="internet-archaeology";
+function dismissed(){
+try{
+var v=localStorage.getItem(KEY);
+return !!v&&v.split(",").indexOf(SLUG)!==-1
+}catch(e){return false}
+}
+if(dismissed()){bar.style.display="none";return}
+var btn=bar.querySelector(".lc-bar__close");
+if(!btn){return}
+btn.hidden=false;
+btn.addEventListener("click",function(){
+bar.style.display="none";
+try{
+var v=localStorage.getItem(KEY)||"";
+if(v.split(",").indexOf(SLUG)===-1){
+localStorage.setItem(KEY,v?v+","+SLUG:SLUG)
+}
+}catch(e){}
+});
+})();
+</script>
 </aside>
 <!--lc-provenance-bar:end-->
 <div class="wrap">
